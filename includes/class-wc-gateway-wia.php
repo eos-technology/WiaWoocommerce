@@ -169,6 +169,11 @@ class WC_Gateway_Wia extends WC_Payment_Gateway {
         $items = array();
         $total_quantity = 0;
 
+        $billing_email = $order->get_billing_email();
+        $billing_first_name = $order->get_billing_first_name();
+        $billing_last_name = $order->get_billing_last_name();
+        $full_name = $billing_first_name . ' ' . $billing_last_name;
+
         foreach ($order->get_items() as $item_id => $item) {
             $product = $item->get_product();
             $items[] = array(
@@ -180,6 +185,8 @@ class WC_Gateway_Wia extends WC_Payment_Gateway {
         }
 
         $body = array(
+            'purchaseName'=> $full_name,
+            'purchaseEmail' => $billing_email,
             'purchaseId' => strval($order_id),
             'items' => $items,
             'quantity' => strval($total_quantity)
